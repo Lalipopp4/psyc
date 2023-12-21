@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Регистрация</title>
+    </head>
+    <body>
+        <div class="container">
+            <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+              <button method="POST" formaction="/index">Главная</button>
+              <button method="POST" formaction="/reg">Регистрация</button>
+              <button method="POST" formaction="/auth">Авторизация</button>
+              <button method="POST" formaction="/user">Личный кабинет</button>
+            </header>
+          </div>
+        <h2>Регистрация</h2>
+        <form method="POST" action="reg">
+            <label>Фамилия</label><br>
+            <input type="text" name="lastname" required/><br><br>
+            <label>Имя</label><br>
+            <input type="text" name="firstname" required/><br><br>
+            <label>Отчество (при наличии)</label><br>
+            <input type="text" name="patronymic"/><br><br>
+            <label>Почта</label><br>
+            <input type="email" name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required/><br><br>
+            <label>Пароль</label><br>
+            <input type="password" name="password" required/><br><br>
+            <label>Подтверждение пароля</label><br>
+            <input type="password" name="password_confirm" required/><br><br>
+            <input type="submit" value="Отправить" />
+        </form>
+    </body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Личный кабинет</title>
+    </head>
+    <body>
+        <div class="container">
+            <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+                <div>
+                    <button method="POST" formaction="/index">Главная</button>
+                </div>
+                <div float="right">
+                
+                    <button method="POST" formaction="/reg">Регистрация</button>
+                    <button method="POST" formaction="/auth">Авторизация</button>
+                    <button method="POST" formaction="/user">Личный кабинет</button>
+                </div>
+              
+            </header>
+          </div>
+
+        <p>Здравствуйте, {{ .Name}}</p>
+        <button method="POST" formaction="/user/info">Обновить личные данные</button>
+        <form>
+            <button method="POST" formaction="/user/keirsey">Пройти тест</button>
+            <button method="POST" formaction="/user/hall">Пройти тест</button>
+        </form>
+        <h1>Результаты прохождения</h1>
+        {{if .Profile}}
+        <table>
+            <tr>
+                <th>N</th>
+                <th>Формула</th>
+                <th>Тип</th>
+                <!--<th>Психотип</th>-->
+                <th>Описание</th>
+                
+            </tr>
+            {{range .Profile}}
+                <tr>
+                    <td>{{ .N}}</td><td>{{ .Formula}}</td><td>{{ .Type}}</td><td>{{ .Description}}</td>
+                </tr>
+            {{end}}
+        </table>
+        {{end}}
+    </body>
+</html>

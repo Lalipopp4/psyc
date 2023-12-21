@@ -1,0 +1,22 @@
+version: '3.1'
+
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_LOGIN: postgres
+      POSTGRES_DBNAME: server
+      POSTGRES_PORT: 5433
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 81:81
+
+  golang:
+    build: ./
+    ports:
+      - 80:80

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Ввод данных</title>
+    </head>
+    <body>
+        <div class="container">
+            <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+              <button method="POST" formaction="/index">Главная</button>
+              <button method="POST" formaction="/reg">Регистрация</button>
+              <button method="POST" formaction="/auth">Авторизация</button>
+              <button method="POST" formaction="/user">Личный кабинет</button>
+            </header>
+          </div>
+        <h2>Авторизация</h2>
+        <form method="POST" action="auth">
+            <label>Почта</label><br>
+            <input type="text" name="email"/><br><br>
+            <label>Пароль</label><br>
+            <input type="text" name="password" required/><br><br>
+            <input type="submit" value="Отправить" />
+        </form>
+    </body>
+</html>
