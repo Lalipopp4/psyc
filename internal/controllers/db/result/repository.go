@@ -6,6 +6,8 @@ import (
 )
 
 type Repository interface {
-	Get(ctx context.Context, param interface{}) ([]models.Result, error)
-	Add(ctx context.Context, result models.Result) error
+	GetByTest(ctx context.Context, test string, params ...string) ([]models.Res, error)
+	GetByUsers(ctx context.Context, users []string) ([]models.Test, error)
+	Add(ctx context.Context, test *models.Test) error
+	GetUsers(ctx context.Context, key string, param string) ([]string, error)
 }

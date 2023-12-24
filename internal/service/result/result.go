@@ -6,7 +6,9 @@ import (
 )
 
 type Service interface {
-	GetByUser(ctx context.Context, id string) ([]models.Result, error)
+	Get(ctx context.Context, key, param string) ([]models.Test, error)
 	Keirsey(ctx context.Context, id string, res [4]int) error
 	Hall(ctx context.Context, id string, res [5]int) error
+	Bass(ctx context.Context, id string, self, task, social int) error
+	Eysenck(ctx context.Context, id string, res int) error
 }
