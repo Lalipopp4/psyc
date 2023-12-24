@@ -6,7 +6,7 @@ import (
 )
 
 // Catches panics and recovers app
-func PanicRecovery(logger *slog.Logger) func(http.Handler) http.Handler {
+func PanicRecovery(logger slog.Logger) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			defer func() {

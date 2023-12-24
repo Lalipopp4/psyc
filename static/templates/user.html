@@ -23,8 +23,10 @@
         <p>Здравствуйте, {{ .Name}}</p>
         <button method="POST" formaction="/user/info">Обновить личные данные</button>
         <form>
-            <button method="POST" formaction="/user/keirsey">Пройти тест</button>
-            <button method="POST" formaction="/user/hall">Пройти тест</button>
+            <button method="POST" formaction="/user/keirsey">Пройти тест Кейрси</button>
+            <button method="POST" formaction="/user/hall">Пройти тест Холла</button>
+            <button method="POST" formaction="/user/bass">Пройти тест Басса</button>
+            <button method="POST" formaction="/user/eysenck">Пройти тест Айзенка</button>
         </form>
         <h1>Результаты прохождения</h1>
         {{if .Profile}}

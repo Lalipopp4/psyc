@@ -1,4 +1,4 @@
-package transport
+package result
 
 import (
 	"os"
@@ -7,9 +7,7 @@ import (
 )
 
 type Config struct {
-	Server struct {
-		Addr    string `default:"0.0.0.0:8080" yaml:"addr"`
-		Timeout int    `default:"10" yaml:"timeout"`
+	DB struct {
 	}
 }
 

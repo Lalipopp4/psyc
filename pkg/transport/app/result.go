@@ -5,9 +5,10 @@ import (
 	"net/http"
 	"strconv"
 	"sync"
+	"text/template"
 )
 
-func (a *appHTTP) hall(w http.ResponseWriter, r *http.Request) {
+func (a *resultHandler) hall(w http.ResponseWriter, r *http.Request) {
 	var (
 		res = [5]int{0, 0, 0, 0, 0}
 		wg  sync.WaitGroup
@@ -27,16 +28,16 @@ func (a *appHTTP) hall(w http.ResponseWriter, r *http.Request) {
 		}(i)
 	}
 	wg.Wait()
-	err := a.result.Hall(r.Context(), r.Context().Value("id").(string), res)
+	err := a.service.Hall(r.Context(), r.Context().Value("id").(string), res)
 	if err != nil {
 		a.logger.Error("error handling results: %v", err)
-		http.Redirect(w, r, "/user", http.StatusInternalServerError)
+		http.Redirect(w, r, "/index", http.StatusInternalServerError)
 		return
 	}
 	http.Redirect(w, r, "/user", http.StatusSeeOther)
 }
 
-func (a *appHTTP) keirsey(w http.ResponseWriter, r *http.Request) {
+func (a *resultHandler) keirsey(w http.ResponseWriter, r *http.Request) {
 	var (
 		wg  sync.WaitGroup
 		mu  sync.Mutex
@@ -59,10 +60,21 @@ func (a *appHTTP) keirsey(w http.ResponseWriter, r *http.Request) {
 		}(i)
 	}
 	wg.Wait()
-	if err := a.result.Keirsey(r.Context(), r.Context().Value("id").(string), res); err != nil {
+	if err := a.service.Keirsey(r.Context(), r.Context().Value("id").(string), res); err != nil {
 		a.logger.Error("error handling results: %v", err)
-		http.Redirect(w, r, "/user", http.StatusInternalServerError)
+		http.Redirect(w, r, "/index", http.StatusInternalServerError)
 		return
 	}
 	http.Redirect(w, r, "/user", http.StatusSeeOther)
+}
+
+func (a *resultHandler) account(w http.ResponseWriter, r *http.Request) {
+	tmpl := template.Must(template.ParseFiles("psyc/static/templates/user.html"))
+	results, err := a.service.Get(r.Context(), "user", r.Context().Value("id").(string))
+	if err != nil {
+		a.logger.Error("error handling results: %v", err)
+		http.Redirect(w, r, "/index", http.StatusInternalServerError)
+		return
+	}
+	tmpl.Execute(w, results)
 }

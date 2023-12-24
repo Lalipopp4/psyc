@@ -23,6 +23,8 @@ const (
 
 func main() {
 
+	// cfgdb := &resultStorage.InitConfig{"psyc/config/config.yaml"}
+
 	connStr := "user=postgres password=postgres dbname=psyc sslmode=disable"
 	db, err := sql.Open("postgres", connStr)
 
@@ -35,7 +37,7 @@ func main() {
 	resultService := result.New(resultStorage)
 
 	// Logger initialization
-	logger := &slog.Logger{}
+	logger := slog.Logger{}
 
 	// Config initialization
 	appConfig, err := app.InitConfig("config/config.yaml")
@@ -54,8 +56,8 @@ func main() {
 		}
 	}()
 
-	logger.Info("Server is running on %s...", appConfig.Addr)
-	logger.Info("To stop it enter %s", stop)
+	slog.Info("Server is running on " + appConfig.Server.Addr)
+	slog.Info("To stop it enter " + stop)
 
 	ctx, cancel := context.WithCancel(context.Background())
 
