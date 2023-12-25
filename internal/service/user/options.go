@@ -37,3 +37,7 @@ func (s *userService) Register(ctx context.Context, user *models.User) (string, 
 	}
 	return token, s.repo.Add(ctx, user)
 }
+
+func (s *userService) Update(ctx context.Context, info *models.User) error {
+	return s.repo.Update(ctx, info)
+}

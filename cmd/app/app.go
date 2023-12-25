@@ -14,7 +14,7 @@ import (
 	"psyc/internal/service/user"
 	app "psyc/pkg/transport/app"
 
-	cache "psyc/internal/controllers/cache"
+	"psyc/internal/controllers/cache"
 
 	_ "github.com/lib/pq"
 	redis "github.com/redis/go-redis/v9"

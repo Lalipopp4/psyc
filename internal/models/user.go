@@ -1,7 +1,8 @@
 package models
 
 type User struct {
-	ID string
+	ID       string
+	Password string
 	Info
 }
 
@@ -10,9 +11,10 @@ type Info struct {
 	Firstname  string
 	Patronymic string
 	Email      string
-	Password   string
 	Uni        string
 	Syllabus   string
 	Group      string
-	Age        int8
+	Age        string
+	City       string
+	Grade      string
 }

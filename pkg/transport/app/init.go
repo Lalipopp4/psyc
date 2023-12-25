@@ -111,6 +111,15 @@ func Init(user user.Service, result result.Service, logger slog.Logger, config *
 		http.ServeFile(w, r, `psyc/static/html/hall.html`)
 	}).Methods("GET")
 
+	auth.HandleFunc("/info", func(w http.ResponseWriter, r *http.Request) {
+		if !sessions.Check(w, r) {
+			w.WriteHeader(http.StatusForbidden)
+		}
+		http.ServeFile(w, r, `psyc/static/html/info.html`)
+	}).Methods("GET")
+
+	auth.HandleFunc("/info", userHandler.info).Methods("POST")
+
 	auth.HandleFunc("/keirsey", resultHandler.keirsey).Methods("POST")
 
 	auth.HandleFunc("/hall", resultHandler.hall).Methods("POST")

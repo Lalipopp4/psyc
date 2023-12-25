@@ -6,12 +6,9 @@ import (
 	"net/http"
 	"psyc/internal/errors"
 	"psyc/pkg/scripts"
+	"strings"
 
-	cache "psyc/internal/controllers/cache"
-)
-
-var (
-	admin = []string{"1", "2"}
+	"psyc/internal/controllers/cache"
 )
 
 // Checks if token is valid
@@ -25,13 +22,11 @@ func AuthToken(logger slog.Logger, cache cache.Cache) func(http.Handler) http.Ha
 				return
 			}
 			var auth bool
-			switch r.URL.Path {
-			case "/admin":
+			if strings.Contains(r.URL.Path, "admin") {
 				auth = cache.Check(r.Context(), "admin", id)
-			default:
+			} else {
 				auth = cache.Check(r.Context(), "user", id)
 			}
-
 			if !auth {
 				http.Error(w, errors.ErrSessionNotAuthenticated, http.StatusUnauthorized)
 				slog.Error(errors.ErrSessionNotAuthenticated)

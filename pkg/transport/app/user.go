@@ -28,12 +28,18 @@ func (a *userHandler) login(w http.ResponseWriter, r *http.Request) {
 
 func (a *userHandler) register(w http.ResponseWriter, r *http.Request) {
 	user := &models.User{
+		ID:       r.Context().Value("id").(string),
+		Password: r.FormValue("password"),
 		Info: models.Info{
 			Lastname:   r.FormValue("lastname"),
 			Firstname:  r.FormValue("firstname"),
 			Patronymic: r.FormValue("patronymic"),
 			Email:      r.FormValue("email"),
-			Password:   r.FormValue("password"),
+			Uni:        r.FormValue("uni"),
+			Age:        r.FormValue("age"),
+			Grade:      r.FormValue("grade"),
+			Syllabus:   r.FormValue("syllabus"),
+			City:       r.FormValue("city"),
 		},
 	}
 	token, err := a.service.Register(r.Context(), user)
@@ -48,4 +54,28 @@ func (a *userHandler) register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	http.Redirect(w, r, "/auth", http.StatusSeeOther)
+}
+
+func (a *userHandler) info(w http.ResponseWriter, r *http.Request) {
+	user := &models.User{
+		ID:       r.Context().Value("id").(string),
+		Password: r.FormValue("password"),
+		Info: models.Info{
+			Lastname:   r.FormValue("lastname"),
+			Firstname:  r.FormValue("firstname"),
+			Patronymic: r.FormValue("patronymic"),
+			Email:      r.FormValue("email"),
+			Uni:        r.FormValue("uni"),
+			Age:        r.FormValue("age"),
+			Grade:      r.FormValue("grade"),
+			Syllabus:   r.FormValue("syllabus"),
+			City:       r.FormValue("city"),
+		},
+	}
+	if err := a.service.Update(r.Context(), user); err != nil {
+		a.logger.Error(err.Error())
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	http.Redirect(w, r, "/user", http.StatusSeeOther)
 }
