@@ -11,6 +11,8 @@ import (
 
 	"psyc/pkg/transport/middleware"
 
+	cache "psyc/internal/controllers/cache"
+
 	"github.com/gorilla/mux"
 )
 
@@ -31,7 +33,7 @@ type appHTTP struct {
 }
 
 // Inits app and handlers
-func Init(user user.Service, result result.Service, logger slog.Logger, config *Config) App {
+func Init(user user.Service, result result.Service, logger slog.Logger, config *Config, cache cache.Cache) App {
 	rtr := mux.NewRouter()
 
 	userHandler := &userHandler{
@@ -73,6 +75,14 @@ func Init(user user.Service, result result.Service, logger slog.Logger, config *
 		http.ServeFile(w, r, `psyc/static/html/auth.html`)
 	}).Methods("GET")
 
+	rtr.HandleFunc("/auth", userHandler.login).Methods("POST")
+
+	rtr.HandleFunc("/reg", userHandler.register).Methods("POST")
+
+	auth := rtr.NewRoute().Subrouter()
+
+	auth.Use(middleware.AuthToken(logger, cache))
+
 	rtr.HandleFunc("/user/keirsey", func(w http.ResponseWriter, r *http.Request) {
 		if !sessions.Check(w, r) {
 			w.WriteHeader(http.StatusForbidden)
@@ -96,10 +106,6 @@ func Init(user user.Service, result result.Service, logger slog.Logger, config *
 	rtr.HandleFunc("/user/eysenck", resultHandler.hall).Methods("POST")
 
 	rtr.HandleFunc("/user", resultHandler.account)
-
-	rtr.HandleFunc("/auth", userHandler.login).Methods("POST")
-
-	rtr.HandleFunc("/reg", userHandler.register).Methods("POST")
 
 	return app
 }

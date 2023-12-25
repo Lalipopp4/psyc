@@ -68,6 +68,24 @@ func (a *resultHandler) keirsey(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/user", http.StatusSeeOther)
 }
 
+func (a *resultHandler) bass(w http.ResponseWriter, r *http.Request) {
+	res := [3]int{0, 0, 0}
+	for i := 0; i < 27; i++ {
+		val, err := strconv.Atoi(r.FormValue("q" + strconv.Itoa(i)))
+		if err != nil {
+			a.logger.Error("error parsing results: %v", err)
+			return
+		}
+		res[val]++
+	}
+	if err := a.service.Bass(r.Context(), r.Context().Value("id").(string), res[0], res[1], res[2]); err != nil {
+		a.logger.Error("error handling results: %v", err)
+		http.Redirect(w, r, "/index", http.StatusInternalServerError)
+		return
+	}
+	http.Redirect(w, r, "/user", http.StatusSeeOther)
+}
+
 func (a *resultHandler) account(w http.ResponseWriter, r *http.Request) {
 	tmpl := template.Must(template.ParseFiles("psyc/static/templates/user.html"))
 	results, err := a.service.Get(r.Context(), "user", r.Context().Value("id").(string))

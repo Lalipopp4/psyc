@@ -6,7 +6,8 @@ import (
 	"net/http"
 	"psyc/internal/errors"
 	"psyc/pkg/scripts"
-	"slices"
+
+	cache "psyc/internal/controllers/cache"
 )
 
 var (
@@ -14,11 +15,24 @@ var (
 )
 
 // Checks if token is valid
-func AuthToken(logger slog.Logger) func(http.Handler) http.Handler {
+func AuthToken(logger slog.Logger, cache cache.Cache) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			id, _, err := scripts.ParseJWTUserToken(r.Header.Get("Authorization"))
-			if err != nil || r.URL.Path == "admin" && !slices.Contains[[]string, string](admin, id) {
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				slog.Error(err.Error())
+				return
+			}
+			var auth bool
+			switch r.URL.Path {
+			case "/admin":
+				auth = cache.Check(r.Context(), "admin", id)
+			default:
+				auth = cache.Check(r.Context(), "user", id)
+			}
+
+			if !auth {
 				http.Error(w, errors.ErrSessionNotAuthenticated, http.StatusUnauthorized)
 				slog.Error(errors.ErrSessionNotAuthenticated)
 				return

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Тест Басса</title>
+    </head>
+    <body>
+        <div class="container">
+            <form method="POST" action="bass">
+                <div class="question">
+                    <p>1. Наибольшее удовлетворение я получаю от</p>
+                    <input type="radio" name="q1" value="0" required="required"> Одобрения моей работы. <br>
+                    <input type="radio" name="q1" value="1" required="required"> Сознания того, что работа сделана хорошо. <br>
+                    <input type="radio" name="q1" value="2" required="required"> Сознания того, что меня окружают друзья.
+                </div>
+                <div class="question">
+                    <p>2. Если бы я играл в футбол (волейбол, баскетбол), то я хотел бы быть</p>
+                    <input type="radio" name="q2" value="0" required="required"> Тренером, который разрабатывает тактику игры. <br>
+                    <input type="radio" name="q2" value="1" required="required"> Известным игроком. <br>
+                    <input type="radio" name="q2" value="2" required="required"> Выбранным капитаном команды.
+                </div>
+                <div class="question">
+                    <p>3. По-моему, лучшим педагогом является тот, кто</p>
+                    <input type="radio" name="q3" value="0" required="required"> Проявляет интерес к учащимся и к каждому имеет индивидуальный подход. <br>
+                    <input type="radio" name="q3" value="1" required="required"> Вызывает интерес к предмету так, что учащиеся с удовольствием углубляют свои знания в этом предмете. <br>
+                    <input type="radio" name="q3" value="2" required="required"> Создает в коллективе такую атмосферу, при которой никто не боится высказать свое мнение.
+                </div>
+                
+                <div class="question">
+                    <p>4. Мне нравится, когда люди</p>
+                    <input type="radio" name="q4" value="0" required="required"> Радуются выполненной работе. <br>
+                    <input type="radio" name="q4" value="1" required="required"> С удовольствием работают в коллективе. <br>
+                    <input type="radio" name="q4" value="2" required="required"> Стремятся выполнить свою работу лучше других.
+                </div>
+                <div class="question">
+                    <p>5. Я хотел бы, чтобы мои друзья</p>
+                    <input type="radio" name="q5" value="0" required="required"> Были отзывчивы и помогали людям, когда для этого представляются возможности. <br>
+                    <input type="radio" name="q5" value="1" required="required"> Были верны и преданы мне. <br>
+                    <input type="radio" name="q5" value="2" required="required"> Были умными и интересными людьми.
+                </div>
+                <div class="question">
+                    <p>6. Лучшими друзьями я считаю тех</p>
+                    <input type="radio" name="q6" value="0" required="required"> С кем складываются хорошие взаимоотношения. <br>
+                    <input type="radio" name="q6" value="1" required="required"> На кого всегда можно положиться. <br>
+                    <input type="radio" name="q6" value="2" required="required"> Кто может многого достичь в жизни.
+                </div>
+                <div class="question">
+                    <p>7. Больше всего я не люблю</p>
+                    <input type="radio" name="q7" value="0" required="required"> Когда у меня что-то не получается. <br>
+                    <input type="radio" name="q7" value="1" required="required"> Когда портятся отношения с товарищами. <br>
+                    <input type="radio" name="q7" value="2" required="required"> Когда меня критикуют.
+                </div>
+                <div class="question">
+                    <p>8. По-моему, хуже всего, когда педагог</p>
+                    <input type="radio" name="q8" value="0" required="required"> Не скрывает, что некоторые учащиеся ему несимпатичны, насмехается и подшучивает над ними. <br>
+                    <input type="radio" name="q8" value="1" required="required"> Вызывает дух соперничества в коллективе. <br>
+                    <input type="radio" name="q8" value="2" required="required"> Недостаточно хорошо знает свой предмет.
+                </div>
+                <div class="question">
+                    <p>9. В детстве мне больше всего нравилось</p>
+                    <input type="radio" name="q9" value="0" required="required"> Проводить время с друзьями. <br>
+                    <input type="radio" name="q9" value="1" required="required"> Ощущение выполненных дел. <br>
+                    <input type="radio" name="q9" value="2" required="required"> Когда меня за что-нибудь хвалили.
+                </div>
+                <div class="question">
+                    <p>10. Я хотел бы быть похожим на тех, кто</p>
+                    <input type="radio" name="q10" value="0" required="required"> Добился успеха в жизни. <br>
+                    <input type="radio" name="q10" value="1" required="required"> По-настоящему увлечен своим делом. <br>
+                    <input type="radio" name="q10" value="2" required="required"> Отличается дружелюбием и доброжелательностью.
+                </div>
+                <div class="question">
+                    <p>11. В первую очередь школа должна</p>
+                    <input type="radio" name="q11" value="0" required="required"> Научить решать задачи, которые ставит жизнь. <br>
+                    <input type="radio" name="q11" value="1" required="required"> Развивать прежде всего индивидуальные способности ученика. <br>
+                    <input type="radio" name="q11" value="2" required="required"> Выбранным капитаном команды.
+                </div>
+                <div class="question">
+                    <p>12. Если бы у меня было больше свободного времени, охотнее всего я использовал бы его</p>
+                    <input type="radio" name="q12" value="0" required="required"> Для общения с друзьями. <br>
+                    <input type="radio" name="q12" value="1" required="required"> Для отдыха и развлечений. <br>
+                    <input type="radio" name="q12" value="2" required="required"> Для своих любимых дел и самообразования.
+                </div>
+                <div class="question">
+                    <p>13. Наибольших успехов я добиваюсь, когда</p>
+                    <input type="radio" name="q13" value="0" required="required"> Работаю с людьми, которые мне симпатичны. <br>
+                    <input type="radio" name="q13" value="1" required="required"> У меня интересная работа. <br>
+                    <input type="radio" name="q13" value="2" required="required"> Мои усилия хорошо вознаграждаются.
+                </div>
+                <div class="question">
+                    <p>14. Я люблю, когда</p>
+                    <input type="radio" name="q14" value="0" required="required"> Другие люди меня ценят. <br>
+                    <input type="radio" name="q14" value="1" required="required"> Испытываю удовлетворение от выполненной работы.<br>
+                    <input type="radio" name="q14" value="2" required="required"> Приятно провожу время с друзьями.
+                </div>
+                <div class="question">
+                    <p>15. Если бы обо мне решили написать в газете, мне бы хотелось, чтобы</p>
+                    <input type="radio" name="q15" value="0" required="required"> Рассказали об интересном деле, связанным с учебой, работой, спортом, в котором мне довелось участвовать. <br>
+                    <input type="radio" name="q15" value="1" required="required"> Написали о моей деятельности. <br>
+                    <input type="radio" name="q15" value="2" required="required"> Обязательно рассказали о коллективе, в котором я работаю.
+                </div>
+                <div class="question">
+                    <p>16. Лучше всего я учусь, если преподаватель</p>
+                    <input type="radio" name="q16" value="0" required="required"> Имеет ко мне индивидуальный подход. <br>
+                    <input type="radio" name="q16" value="1" required="required"> Сумеет вызвать у меня интерес к предмету. <br>
+                    <input type="radio" name="q16" value="2" required="required"> Устраивает коллективные обсуждения изучаемых проблем.
+                </div>
+                <div class="question">
+                    <p>17. Для меня нет ничего хуже, чем</p>
+                    <input type="radio" name="q17" value="0" required="required"> Оскорбление личного достоинства. <br>
+                    <input type="radio" name="q17" value="1" required="required"> Неудача при выполнении важного дела. <br>
+                    <input type="radio" name="q17" value="2" required="required"> Потеря друзей.
+                </div>
+                <div class="question">
+                    <p>18. Больше всего я ценю</p>
+                    <input type="radio" name="q18" value="0" required="required"> Успех. <br>
+                    <input type="radio" name="q18" value="1" required="required"> Возможности хорошей совместной работы. <br>
+                    <input type="radio" name="q18" value="2" required="required"> Здравый практичный ум и смекалку.
+                </div>
+                <div class="question">
+                    <p>19. Я не люблю людей, которые</p>
+                    <input type="radio" name="q19" value="0" required="required"> Считают себя хуже других. <br>
+                    <input type="radio" name="q19" value="1" required="required"> Часто ссорятся и конфликтуют. <br>
+                    <input type="radio" name="q19" value="2" required="required"> Возражают против всего нового.
+                </div>
+                <div class="question">
+                    <p>20. Приятно, когда</p>
+                    <input type="radio" name="q20" value="0" required="required"> Работаешь над важным для всех делом. <br>
+                    <input type="radio" name="q20" value="1" required="required"> Имеешь много друзей. <br>
+                    <input type="radio" name="q20" value="2" required="required"> Вызываешь восхищение и всем нравишься.
+                </div>
+                <div class="question">
+                    <p>21. По-моему, в первую очередь руководитель должен быть</p>
+                    <input type="radio" name="q21" value="0" required="required"> Доступным. <br>
+                    <input type="radio" name="q21" value="1" required="required"> Авторитетным. <br>
+                    <input type="radio" name="q21" value="2" required="required"> Требовательным.
+                </div>
+                <div class="question">
+                    <p>22. В свободное время я охотно прочитал бы книги</p>
+                    <input type="radio" name="q22" value="0" required="required"> О том, как заводить друзей и поддерживать хорошие отношения с людьми. <br>
+                    <input type="radio" name="q22" value="1" required="required"> О жизни знаменитых и интересных людей. <br>
+                    <input type="radio" name="q22" value="2" required="required"> О последних достижениях науки и техники.
+                </div>
+                <div class="question">
+                    <p>23. Если бы у меня были способности к музыке, я предпочел бы быть</p>
+                    <input type="radio" name="q23" value="0" required="required"> Дирижером. <br>
+                    <input type="radio" name="q23" value="1" required="required"> Композитором. <br>
+                    <input type="radio" name="q23" value="2" required="required"> Солистом.
+                </div>
+                <div class="question">
+                    <p>24. Мне бы хотелось</p>
+                    <input type="radio" name="q24" value="0" required="required"> Придумать интересный конкурс. <br>
+                    <input type="radio" name="q24" value="1" required="required"> Победить в конкурсе. <br>
+                    <input type="radio" name="q24" value="2" required="required"> Организовать конкурс и руководить им.
+                </div>
+                <div class="question">
+                    <p>25. Для меня важнее всего знать</p>
+                    <input type="radio" name="q25" value="0" required="required"> Что я хочу сделать. <br>
+                    <input type="radio" name="q25" value="1" required="required"> Как достичь цели. <br>
+                    <input type="radio" name="q25" value="2" required="required"> Как организовать людей для достижения цели.
+                </div>
+                <div class="question">
+                    <p>26. Человек должен стремиться к тому, чтобы</p>
+                    <input type="radio" name="q26" value="0" required="required"> Другие были им довольны. <br>
+                    <input type="radio" name="q26" value="1" required="required"> Прежде всего выполнить свою задачу. <br>
+                    <input type="radio" name="q26" value="2" required="required"> Его не нужно было упрекать за выполненную работу.
+                </div>
+                <div class="question">
+                    <p>27. Лучше всего я отдыхаю в свободное время</p>
+                    <input type="radio" name="q27" value="0" required="required"> В общении с друзьями. <br>
+                    <input type="radio" name="q27" value="1" required="required"> Просматривая развлекательные фильмы. <br>
+                    <input type="radio" name="q27" value="2" required="required"> Занимаясь своим любимым делом.
+                </div>
+                <br>
+                <input type="submit" value="Результат">
+            </form>
+        </div>
+    </body>
+</html>

@@ -14,7 +14,10 @@ import (
 	"psyc/internal/service/user"
 	app "psyc/pkg/transport/app"
 
+	cache "psyc/internal/controllers/cache"
+
 	_ "github.com/lib/pq"
+	redis "github.com/redis/go-redis/v9"
 )
 
 const (
@@ -27,13 +30,27 @@ func main() {
 
 	connStr := "user=postgres password=postgres dbname=psyc sslmode=disable"
 	db, err := sql.Open("postgres", connStr)
+	ctx, cancel := context.WithCancel(context.Background())
+
+	redisClient := redis.NewClient(&redis.Options{
+		Addr:     "localhost:6379",
+		Password: "",
+		DB:       0,
+	})
+
+	_, err = redisClient.Ping(ctx).Result()
+	if err != nil {
+		panic("Redis connection error: " + err.Error())
+	}
+
+	cache := cache.New(redisClient)
 
 	// Storages initialization
 	userStorage := userStorage.New(db)
 	resultStorage := resultStorage.New(db)
 
 	// Services initialization
-	userService := user.New(userStorage)
+	userService := user.New(userStorage, cache)
 	resultService := result.New(resultStorage)
 
 	// Logger initialization
@@ -47,7 +64,7 @@ func main() {
 	}
 
 	// App initialization
-	app := app.Init(userService, resultService, logger, appConfig)
+	app := app.Init(userService, resultService, logger, appConfig, cache)
 
 	// Starting app
 	go func() {
@@ -58,8 +75,6 @@ func main() {
 
 	slog.Info("Server is running on " + appConfig.Server.Addr)
 	slog.Info("To stop it enter " + stop)
-
-	ctx, cancel := context.WithCancel(context.Background())
 
 	go func(ctx context.Context) {
 		if err := app.Stop(ctx); err != nil {

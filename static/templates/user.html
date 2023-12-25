@@ -33,15 +33,14 @@
         <table>
             <tr>
                 <th>N</th>
-                <th>Формула</th>
-                <th>Тип</th>
-                <!--<th>Психотип</th>-->
-                <th>Описание</th>
+                <th>Тест</th>
+                <th>Результат</th>
+                <th>Дата</th>
                 
             </tr>
             {{range .Profile}}
                 <tr>
-                    <td>{{ .N}}</td><td>{{ .Formula}}</td><td>{{ .Type}}</td><td>{{ .Description}}</td>
+                    <td>{{ .N}}</td><td>{{ .Test}}</td><td>{{ .Res}}</td><td>{{ .Date}}</td>
                 </tr>
             {{end}}
         </table>

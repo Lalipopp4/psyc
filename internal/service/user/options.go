@@ -17,6 +17,9 @@ func (s *userService) Login(ctx context.Context, email, password string) (string
 	if err != nil {
 		return "", err
 	}
+	if err := s.cache.Add(ctx, id, email); err != nil {
+		return "", err
+	}
 	return token, nil
 }
 
