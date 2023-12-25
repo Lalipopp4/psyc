@@ -79,33 +79,49 @@ func Init(user user.Service, result result.Service, logger slog.Logger, config *
 
 	rtr.HandleFunc("/reg", userHandler.register).Methods("POST")
 
-	auth := rtr.NewRoute().Subrouter()
+	auth := rtr.PathPrefix("/user").Subrouter()
 
 	auth.Use(middleware.AuthToken(logger, cache))
 
-	rtr.HandleFunc("/user/keirsey", func(w http.ResponseWriter, r *http.Request) {
+	auth.HandleFunc("/keirsey", func(w http.ResponseWriter, r *http.Request) {
 		if !sessions.Check(w, r) {
 			w.WriteHeader(http.StatusForbidden)
 		}
 		http.ServeFile(w, r, `psyc/static/html/keirsey.html`)
 	}).Methods("GET")
 
-	rtr.HandleFunc("/user/hall", func(w http.ResponseWriter, r *http.Request) {
+	auth.HandleFunc("/bass", func(w http.ResponseWriter, r *http.Request) {
+		if !sessions.Check(w, r) {
+			w.WriteHeader(http.StatusForbidden)
+		}
+		http.ServeFile(w, r, `psyc/static/html/bass.html`)
+	}).Methods("GET")
+
+	auth.HandleFunc("/eysenck", func(w http.ResponseWriter, r *http.Request) {
+		if !sessions.Check(w, r) {
+			w.WriteHeader(http.StatusForbidden)
+		}
+		http.ServeFile(w, r, `psyc/static/html/eysenck.html`)
+	}).Methods("GET")
+
+	auth.HandleFunc("/hall", func(w http.ResponseWriter, r *http.Request) {
 		if !sessions.Check(w, r) {
 			w.WriteHeader(http.StatusForbidden)
 		}
 		http.ServeFile(w, r, `psyc/static/html/hall.html`)
 	}).Methods("GET")
 
-	rtr.HandleFunc("/user/keirsey", resultHandler.keirsey).Methods("POST")
+	auth.HandleFunc("/keirsey", resultHandler.keirsey).Methods("POST")
 
-	rtr.HandleFunc("/user/hall", resultHandler.hall).Methods("POST")
+	auth.HandleFunc("/hall", resultHandler.hall).Methods("POST")
 
-	rtr.HandleFunc("/user/bass", resultHandler.keirsey).Methods("POST")
+	auth.HandleFunc("/bass", resultHandler.keirsey).Methods("POST")
 
-	rtr.HandleFunc("/user/eysenck", resultHandler.hall).Methods("POST")
+	auth.HandleFunc("/eysenck", resultHandler.hall).Methods("POST")
 
-	rtr.HandleFunc("/user", resultHandler.account)
+	auth.HandleFunc("", resultHandler.account)
+
+	auth.HandleFunc("/admin", resultHandler.admin).Methods("POST")
 
 	return app
 }

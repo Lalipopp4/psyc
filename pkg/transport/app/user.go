@@ -12,7 +12,7 @@ func (a *userHandler) login(w http.ResponseWriter, r *http.Request) {
 		email    = r.FormValue("email")
 		password = r.FormValue("password")
 	)
-	token, err := a.service.Login(r.Context(), email, password)
+	token, user, err := a.service.Login(r.Context(), email, password)
 	if err != nil {
 		a.logger.Error(err.Error())
 		http.Redirect(w, r, "/auth", http.StatusBadRequest)
@@ -23,7 +23,7 @@ func (a *userHandler) login(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	http.Redirect(w, r, "/user", http.StatusSeeOther)
+	http.Redirect(w, r, user, http.StatusSeeOther)
 }
 
 func (a *userHandler) register(w http.ResponseWriter, r *http.Request) {

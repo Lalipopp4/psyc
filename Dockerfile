@@ -1,8 +1,8 @@
-FROM golang
+FROM golang:latest-alpine
 
-COPY . /server
-WORKDIR /server
+COPY . /app
+WORKDIR /app
 
-RUN go build -v ./cmd/app
+RUN go build -v -o app ./cmd/app
 
 CMD [ "./app" ]

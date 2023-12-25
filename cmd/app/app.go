@@ -21,21 +21,29 @@ import (
 )
 
 const (
-	stop = "q"
+	stop     = "q"
+	filepath = "config/config.yaml"
 )
 
 func main() {
 
-	// cfgdb := &resultStorage.InitConfig{"psyc/config/config.yaml"}
+	cfgPostgres, err := resultStorage.InitConfig(filepath)
+	if err != nil {
+		panic(err)
+	}
 
-	connStr := "user=postgres password=postgres dbname=psyc sslmode=disable"
-	db, err := sql.Open("postgres", connStr)
+	db, err := sql.Open("postgres", cfgPostgres.URL)
 	ctx, cancel := context.WithCancel(context.Background())
 
+	cfgRedis, err := cache.InitConfig(filepath)
+	if err != nil {
+		panic(err)
+	}
+
 	redisClient := redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
-		Password: "",
-		DB:       0,
+		Addr:     cfgRedis.Redis.Addr,
+		Password: cfgRedis.Redis.Password,
+		DB:       cfgRedis.Redis.Database,
 	})
 
 	_, err = redisClient.Ping(ctx).Result()
@@ -57,7 +65,7 @@ func main() {
 	logger := slog.Logger{}
 
 	// Config initialization
-	appConfig, err := app.InitConfig("config/config.yaml")
+	appConfig, err := app.InitConfig(filepath)
 
 	if err != nil {
 		panic(err)

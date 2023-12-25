@@ -3,6 +3,7 @@ package transport
 import (
 	"log"
 	"net/http"
+	"psyc/internal/models"
 	"strconv"
 	"sync"
 	"text/template"
@@ -86,9 +87,42 @@ func (a *resultHandler) bass(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/user", http.StatusSeeOther)
 }
 
+func (a *resultHandler) eysenck(w http.ResponseWriter, r *http.Request) {
+	res := 0
+	for i := 1; i < 41; i++ {
+		if eysenckResults[i-1] == r.FormValue("q"+strconv.Itoa(i)) {
+			res++
+		}
+	}
+	if err := a.service.Eysenck(r.Context(), r.Context().Value("id").(string), res); err != nil {
+		a.logger.Error("error handling results: %v", err)
+		http.Redirect(w, r, "/index", http.StatusInternalServerError)
+		return
+	}
+	http.Redirect(w, r, "/user", http.StatusSeeOther)
+}
+
 func (a *resultHandler) account(w http.ResponseWriter, r *http.Request) {
 	tmpl := template.Must(template.ParseFiles("psyc/static/templates/user.html"))
 	results, err := a.service.Get(r.Context(), "user", r.Context().Value("id").(string))
+	if err != nil {
+		a.logger.Error("error handling results: %v", err)
+		http.Redirect(w, r, "/index", http.StatusInternalServerError)
+		return
+	}
+	profile := struct {
+		Name  string
+		Tests []models.Test
+	}{
+		"Hello",
+		results,
+	}
+	tmpl.Execute(w, profile)
+}
+
+func (a *resultHandler) admin(w http.ResponseWriter, r *http.Request) {
+	tmpl := template.Must(template.ParseFiles("psyc/static/templates/admin.html"))
+	results, err := a.service.Get(r.Context(), r.FormValue("search"), r.FormValue("param"))
 	if err != nil {
 		a.logger.Error("error handling results: %v", err)
 		http.Redirect(w, r, "/index", http.StatusInternalServerError)

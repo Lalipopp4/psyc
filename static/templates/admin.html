@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Личный кабинет</title>
+    </head>
+    <body>
+        <div class="container">
+            <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+                <div>
+                    <button method="POST" formaction="/index">Главная</button>
+                </div>
+              
+            </header>
+          </div>
+          <search>
+            <form method="post" action="/admin">
+                <select name="key">
+                    <option value="uni">Университет</option>
+                    <option value="group">Группа</option>
+                    <option value="age">Возраст</option>
+                    <option value="email">Почта</option>
+                    <option value="grade">Курс</option>
+                    <option value="syllabus">Направление</option>
+                    <option value="city">Город</option>
+                  </select>
+              <input type="search" name="param" />
+              <button>Search</button>
+            </form>
+          </search>
+        
+
+        <h1>Результаты прохождения</h1>
+        {{if .Profile}}
+        <table>
+            <tr>
+                <th>N</th>
+                <th>Тест</th>
+                <th>Результат</th>
+                <th>Дата</th>
+                
+            </tr>
+            {{range .Profile}}
+                <tr>
+                    <td>{{ .UserID}}</td><td>{{ .Test}}</td><td>{{ .Res}}</td><td>{{ .Date}}</td>
+                </tr>
+            {{end}}
+        </table>
+        {{end}}
+    </body>
+</html>

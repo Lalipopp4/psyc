@@ -22,7 +22,7 @@ func (r *resultRepository) GetUsers(ctx context.Context, key, param string) ([]s
 	return users, nil
 }
 
-func (r *resultRepository) GetByTest(ctx context.Context, test string, params ...string) ([]models.Res, error) {
+func (r *resultRepository) GetByTest(ctx context.Context, test string, params ...string) ([]models.Test, error) {
 	var clause string
 	if len(params) > 0 {
 		clause = fmt.Sprintf(" WHERE user_id IN (%s)", strings.Join(params, ", "))
@@ -32,31 +32,30 @@ func (r *resultRepository) GetByTest(ctx context.Context, test string, params ..
 	if err != nil {
 		return nil, err
 	}
-	results := make([]models.Res, 100)
+	results := make([]models.Test, 100)
 	var res, userid, date string
 	for rows.Next() {
 		rows.Scan(&res, &date, &userid)
-		results = append(results, models.Res{Res: res, Date: date, UserID: userid})
+		results = append(results, models.Test{Test: test, Res: res, Date: date, UserID: userid})
 	}
 	return results, nil
 }
 
 func (r *resultRepository) GetByUsers(ctx context.Context, users []string) ([]models.Test, error) {
-
-	var results = make([]models.Test, len(r.tests))
-	for i, t := range r.tests {
+	var results = make([]models.Test, 400)
+	for _, t := range r.tests {
 		var err error
-		results[i].Results, err = r.GetByTest(ctx, t, users...)
+		temp, err := r.GetByTest(ctx, t, users...)
 		if err != nil {
 			return nil, err
 		}
-		results[i].Test = t
+		results = append(results, temp...)
 	}
 	return results, nil
 
 }
 
 func (r *resultRepository) Add(ctx context.Context, test *models.Test) error {
-	_, err := r.cur.ExecContext(ctx, fmt.Sprintf("INSERT INTO %s ('res', 'user_id', 'date') VALUES ($1, $2, $3);", test.Test), test.Results[0].Res, test.Results[0].UserID, test.Results[0].Date)
+	_, err := r.cur.ExecContext(ctx, fmt.Sprintf("INSERT INTO %s ('res', 'user_id', 'date') VALUES ($1, $2, $3);", test.Test), test.Res, test.UserID, test.Date)
 	return err
 }

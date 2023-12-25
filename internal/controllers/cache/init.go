@@ -1,4 +1,4 @@
-package user
+package cache
 
 import redis "github.com/redis/go-redis/v9"
 

@@ -8,19 +8,22 @@ import (
 	"psyc/pkg/scripts"
 )
 
-func (s *userService) Login(ctx context.Context, email, password string) (string, error) {
+func (s *userService) Login(ctx context.Context, email, password string) (string, string, error) {
 	id, pass := s.repo.GetIDPassword(ctx, email)
 	if !scripts.CheckPasswordHash(password, pass) {
-		return "", errors.ErrorNotFound{Msg: errors.ErrUserLogin}
+		return "", "", errors.ErrorNotFound{Msg: errors.ErrUserLogin}
 	}
 	token, err := scripts.GenerateJWTUserToken(id, email)
 	if err != nil {
-		return "", err
+		return "", "", err
+	}
+	if s.cache.Check(ctx, "admin", id) {
+		return token, "/admin", nil
 	}
 	if err := s.cache.Add(ctx, id, email); err != nil {
-		return "", err
+		return "", "", err
 	}
-	return token, nil
+	return token, "/user", nil
 }
 
 func (s *userService) Register(ctx context.Context, user *models.User) (string, error) {
