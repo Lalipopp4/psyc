@@ -1,0 +1,23 @@
+server:
+  addr: localhost:8000
+  debug: true
+  timeout: 10
+
+postgres:
+  host: localhost
+  port: 5432
+  user: root
+  password: root
+  database: test
+
+redis:
+  addr: localhost:6379
+  database: 1
+  password: 
+  user: user
+
+mail:
+  mail: #TODO
+  password: #TODO
+  host: smtp.mail.ru
+  port: 587

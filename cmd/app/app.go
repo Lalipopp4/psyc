@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"database/sql"
+	"flag"
 	"os"
 	"os/signal"
 	"syscall"
@@ -24,11 +25,12 @@ import (
 )
 
 const (
-	stop     = "q"
-	filepath = "config/config.yaml"
+	stop = "q"
 )
 
 func main() {
+
+	filepath := *flag.String("config", "config/config.yml", "Defines path to config file")
 
 	cfgPostgres, err := resultStorage.InitConfig(filepath)
 	if err != nil {
@@ -36,6 +38,10 @@ func main() {
 	}
 
 	db, err := sql.Open("postgres", cfgPostgres.URL)
+	if err != nil {
+		panic(err)
+	}
+
 	ctx, cancel := context.WithCancel(context.Background())
 
 	cfgRedis, err := cache.InitConfig(filepath)
