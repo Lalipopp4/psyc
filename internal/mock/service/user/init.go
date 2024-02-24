@@ -7,10 +7,8 @@ import (
 )
 
 type userService struct {
-	repo  user.Repository
-	cache cache.Cache
 }
 
 func New(repo user.Repository, cache cache.Cache) Service {
-	return &userService{repo, cache}
+	return &userService{}
 }
