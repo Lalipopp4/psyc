@@ -1,0 +1,105 @@
+version: '3.1'
+
+services:
+  postgres:
+    image: postgres:alpine
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_LOGIN: postgres
+      POSTGRES_DBNAME: psyc
+      POSTGRES_PORT: 5432
+    ports:
+      - 5432:5432
+    volumes:
+      - /pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - /path/to/local/data:/root/redis
+      - /path/to/local/redis.conf:/usr/local/etc/redis/redis.conf
+    environment:
+      - REDIS_PASSWORD=
+      - REDIS_PORT=6379
+      - REDIS_DATABASE=0
+
+
+  # golang:
+  #   build: ..
+  #   restart: always
+  #   depends_on:
+  #     - postgres
+  #     - prometheus
+  #     - redis
+  #   ports:
+  #     - 8000:8000
+
+
+  prometheus:
+    image: prom/prometheus
+    restart: always
+    ports:
+      - "9090:9090"
+    expose:
+      - 9090
+    volumes:
+      - "./prometheus:/etc/prometheus"
+
+
+  # alertmanager:
+  #   image: prom/alertmanager
+  #   restart: always
+  #   ports:
+  #     - "9093:9093"
+  #   command:
+  #     - '--config.file=/etc/alertmanager/alertmanager.yml'
+  #   volumes:
+  #     - "./alertmanager:/etc/alertmanager"
+  
+  
+  # alertmanager-bot:
+  #   image: metalmatze/alertmanager-bot
+  #   restart: always
+  #   command:
+  #     - "--listen.addr=0.0.0.0:8080"
+  #   environment:
+  #     ALERTMANAGER_URL: http://alertmanager:9093
+  #     BOLT_PATH: /data/bot.db
+  #     STORE: bolt
+  #     TEMPLATE_PATHS: /templates/default.tmpl
+  #     TELEGRAM_ADMIN: 451866274
+  #     TELEGRAM_TOKEN: 6746766492:AAFZo1PkufL5lgttpBJ7lns4WnTbayIutAE
+  #   volumes:
+  #     - "./alertmanager-bot/templates:/templates"
+  
+  
+  grafana:
+    image: grafana/grafana
+    restart: always
+    links:
+      - prometheus:prometheus # datasource = http://prometheus:9090
+    ports:
+      - 3000:3000
+    user: "104"
+  
+  
+  node-exporter:
+    image: prom/node-exporter
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - --path.procfs=/host/proc
+      - --path.sysfs=/host/sys
+      - --collector.filesystem.ignored-mount-points
+      - ^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)
+    ports:
+      - 9100:9100
+    restart: always
+    deploy:
+      mode: global

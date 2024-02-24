@@ -1,5 +1,5 @@
 server:
-  addr: localhost:8080
+  addr: localhost:8000
   debug: true
   timeout: 10
 
@@ -16,3 +16,8 @@ redis:
   password: 
   user: user
 
+mail:
+  mail: #TODO
+  password: #TODO
+  host: smtp.mail.ru
+  port: 587

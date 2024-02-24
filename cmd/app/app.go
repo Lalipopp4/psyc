@@ -3,21 +3,24 @@ package main
 import (
 	"context"
 	"database/sql"
-	"log/slog"
 	"os"
 	"os/signal"
 	"syscall"
 
 	resultStorage "psyc/internal/controllers/db/result"
 	userStorage "psyc/internal/controllers/db/user"
+	"psyc/internal/controllers/mail"
 	"psyc/internal/service/result"
 	"psyc/internal/service/user"
+	"psyc/pkg/logger"
 	app "psyc/pkg/transport/app"
 
 	"psyc/internal/controllers/cache"
 
 	_ "github.com/lib/pq"
 	redis "github.com/redis/go-redis/v9"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 )
 
 const (
@@ -46,12 +49,18 @@ func main() {
 		DB:       cfgRedis.Redis.Database,
 	})
 
-	_, err = redisClient.Ping(ctx).Result()
-	if err != nil {
+	if _, err = redisClient.Ping(ctx).Result(); err != nil {
 		panic("Redis connection error: " + err.Error())
 	}
 
 	cache := cache.New(redisClient)
+
+	cfgMail, err := mail.InitConfig(filepath)
+	if err != nil {
+		panic(err)
+	}
+
+	mail := mail.New(cfgMail)
 
 	// Storages initialization
 	userStorage := userStorage.New(db)
@@ -59,10 +68,11 @@ func main() {
 
 	// Services initialization
 	userService := user.New(userStorage, cache)
-	resultService := result.New(resultStorage)
+	resultService := result.New(resultStorage, mail)
 
 	// Logger initialization
-	logger := slog.Logger{}
+	zerolog := zerolog.New(os.Stdout).With().Timestamp().Logger()
+	logger := logger.New(zerolog)
 
 	// Config initialization
 	appConfig, err := app.InitConfig(filepath)
@@ -81,8 +91,8 @@ func main() {
 		}
 	}()
 
-	slog.Info("Server is running on " + appConfig.Server.Addr)
-	slog.Info("To stop it enter " + stop)
+	log.Info().Msg("Server is running on " + appConfig.Server.Addr)
+	log.Info().Msg("To stop it enter " + stop)
 
 	go func(ctx context.Context) {
 		if err := app.Stop(ctx); err != nil {

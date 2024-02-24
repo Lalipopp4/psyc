@@ -9,6 +9,7 @@ import (
 	"psyc/internal/sessions"
 	"time"
 
+	"psyc/pkg/logger"
 	"psyc/pkg/transport/middleware"
 
 	cache "psyc/internal/controllers/cache"
@@ -18,12 +19,12 @@ import (
 
 type userHandler struct {
 	service user.Service
-	logger  slog.Logger
+	logger  logger.Logger
 }
 
 type resultHandler struct {
 	service result.Service
-	logger  slog.Logger
+	logger  logger.Logger
 }
 
 type appHTTP struct {
@@ -33,7 +34,7 @@ type appHTTP struct {
 }
 
 // Inits app and handlers
-func Init(user user.Service, result result.Service, logger slog.Logger, config *Config, cache cache.Cache) App {
+func Init(user user.Service, result result.Service, logger logger.Logger, config *Config, cache cache.Cache) App {
 	rtr := mux.NewRouter()
 
 	userHandler := &userHandler{
@@ -124,9 +125,9 @@ func Init(user user.Service, result result.Service, logger slog.Logger, config *
 
 	auth.HandleFunc("/hall", resultHandler.hall).Methods("POST")
 
-	auth.HandleFunc("/bass", resultHandler.keirsey).Methods("POST")
+	auth.HandleFunc("/bass", resultHandler.bass).Methods("POST")
 
-	auth.HandleFunc("/eysenck", resultHandler.hall).Methods("POST")
+	auth.HandleFunc("/eysenck", resultHandler.eysenck).Methods("POST")
 
 	auth.HandleFunc("", resultHandler.account)
 

@@ -8,7 +8,7 @@ import (
 
 type Config struct {
 	Server struct {
-		Addr    string `default:"0.0.0.0:8080" yaml:"addr"`
+		Addr    string `default:"0.0.0.0:8000" yaml:"addr"`
 		Timeout int    `default:"10" yaml:"timeout"`
 	}
 }
