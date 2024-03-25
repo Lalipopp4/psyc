@@ -2,12 +2,13 @@ package transport
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"psyc/internal/models"
 )
 
-func (a *userHandler) login(w http.ResponseWriter, r *http.Request) {
+func (a *userHandler) auth(w http.ResponseWriter, r *http.Request) {
 	var (
 		email    = r.FormValue("email")
 		password = r.FormValue("password")
@@ -15,12 +16,13 @@ func (a *userHandler) login(w http.ResponseWriter, r *http.Request) {
 	token, user, err := a.service.Login(r.Context(), email, password)
 	if err != nil {
 		a.logger.Error(err.Error())
-		http.Redirect(w, r, "/auth", http.StatusBadRequest)
+		http.Redirect(w, r, "/auth", http.StatusSeeOther)
 		return
 	}
 	if err := json.NewEncoder(w).Encode(token); err != nil {
 		a.logger.Error(err.Error())
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Redirect(w, r, "/auth", http.StatusSeeOther)
 		return
 	}
 	http.Redirect(w, r, user, http.StatusSeeOther)
@@ -28,7 +30,6 @@ func (a *userHandler) login(w http.ResponseWriter, r *http.Request) {
 
 func (a *userHandler) register(w http.ResponseWriter, r *http.Request) {
 	user := &models.User{
-		ID:       r.Context().Value("id").(string),
 		Password: r.FormValue("password"),
 		Info: models.Info{
 			Lastname:   r.FormValue("lastname"),
@@ -42,14 +43,16 @@ func (a *userHandler) register(w http.ResponseWriter, r *http.Request) {
 			City:       r.FormValue("city"),
 		},
 	}
+	fmt.Println(user)
 	token, err := a.service.Register(r.Context(), user)
 	if err != nil {
-		a.logger.Error(err.Error())
-		http.Redirect(w, r, "/reg", http.StatusBadRequest)
+		a.logger.Error(err)
+		http.Redirect(w, r, "/reg", http.StatusSeeOther)
 		return
 	}
+	fmt.Println(token)
 	if err := json.NewEncoder(w).Encode(token); err != nil {
-		a.logger.Error(err.Error())
+		a.logger.Error(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

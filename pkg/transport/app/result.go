@@ -76,7 +76,7 @@ func (a *resultHandler) hall(w http.ResponseWriter, r *http.Request) {
 	wg.Wait()
 	err := a.service.Hall(r.Context(), r.Context().Value("id").(string), res)
 	if err != nil {
-		a.logger.Error("error handling results: %v", err)
+		a.logger.Error(err)
 		http.Redirect(w, r, "/index", http.StatusInternalServerError)
 		return
 	}
@@ -96,7 +96,7 @@ func (a *resultHandler) keirsey(w http.ResponseWriter, r *http.Request) {
 			for j := 1; j < 8; j++ {
 				val, err := strconv.Atoi(r.FormValue("q" + strconv.Itoa(i*7+j)))
 				if err != nil {
-					a.logger.Error("error parsing results: %v", err)
+					a.logger.Error(err)
 					return
 				}
 				mu.Lock()
@@ -107,7 +107,7 @@ func (a *resultHandler) keirsey(w http.ResponseWriter, r *http.Request) {
 	}
 	wg.Wait()
 	if err := a.service.Keirsey(r.Context(), r.Context().Value("id").(string), res); err != nil {
-		a.logger.Error("error handling results: %v", err)
+		a.logger.Error(err)
 		http.Redirect(w, r, "/index", http.StatusInternalServerError)
 		return
 	}
@@ -119,13 +119,13 @@ func (a *resultHandler) bass(w http.ResponseWriter, r *http.Request) {
 	for i := 0; i < 27; i++ {
 		val, err := strconv.Atoi(r.FormValue("q" + strconv.Itoa(i)))
 		if err != nil {
-			a.logger.Error("error parsing results: %v", err)
+			a.logger.Error(err)
 			return
 		}
 		res[val]++
 	}
 	if err := a.service.Bass(r.Context(), r.Context().Value("id").(string), res[0], res[1], res[2]); err != nil {
-		a.logger.Error("error handling results: %v", err)
+		a.logger.Error(err)
 		http.Redirect(w, r, "/index", http.StatusInternalServerError)
 		return
 	}
@@ -140,7 +140,7 @@ func (a *resultHandler) eysenck(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if err := a.service.Eysenck(r.Context(), r.Context().Value("id").(string), res); err != nil {
-		a.logger.Error("error handling results: %v", err)
+		a.logger.Error(err)
 		http.Redirect(w, r, "/index", http.StatusInternalServerError)
 		return
 	}
@@ -151,7 +151,7 @@ func (a *resultHandler) account(w http.ResponseWriter, r *http.Request) {
 	tmpl := template.Must(template.ParseFiles("psyc/static/templates/user.html"))
 	results, err := a.service.Get(r.Context(), "user", r.Context().Value("id").(string))
 	if err != nil {
-		a.logger.Error("error handling results: %v", err)
+		a.logger.Error(err)
 		http.Redirect(w, r, "/index", http.StatusInternalServerError)
 		return
 	}
@@ -169,7 +169,7 @@ func (a *resultHandler) admin(w http.ResponseWriter, r *http.Request) {
 	tmpl := template.Must(template.ParseFiles("psyc/static/templates/admin.html"))
 	results, err := a.service.Get(r.Context(), r.FormValue("search"), r.FormValue("param"))
 	if err != nil {
-		a.logger.Error("error handling results: %v", err)
+		a.logger.Error(err)
 		http.Redirect(w, r, "/index", http.StatusInternalServerError)
 		return
 	}

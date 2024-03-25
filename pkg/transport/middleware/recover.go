@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"net/http"
 	"psyc/pkg/logger"
 )
@@ -11,7 +12,7 @@ func PanicRecovery(log logger.Logger) func(http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			defer func() {
 				if err := recover(); err != nil {
-					log.Error("panic recovered on %s: %v", r.URL.Path, err)
+					log.Error(fmt.Errorf("panic recovered on %s: %v", r.URL.Path, err))
 					http.Error(w, err.(error).Error(), http.StatusInternalServerError)
 				}
 			}()

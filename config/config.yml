@@ -21,3 +21,8 @@ mail:
   password: #TODO
   host: smtp.mail.ru
   port: 587
+
+bot:
+  token: 6746766492:AAFZo1PkufL5lgttpBJ7lns4WnTbayIutAE
+  whurl: https://ghoul-causal-snipe.ngrok-free.app
+  port: 80

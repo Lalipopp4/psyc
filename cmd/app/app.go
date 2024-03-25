@@ -24,10 +24,6 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-const (
-	stop = "q"
-)
-
 func main() {
 
 	filepath := *flag.String("config", "config/config.yml", "Defines path to config file")
@@ -98,7 +94,6 @@ func main() {
 	}()
 
 	log.Info().Msg("Server is running on " + appConfig.Server.Addr)
-	log.Info().Msg("To stop it enter " + stop)
 
 	go func(ctx context.Context) {
 		if err := app.Stop(ctx); err != nil {
@@ -110,4 +105,5 @@ func main() {
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
 	cancel()
+	log.Info().Msg("Server stopped")
 }

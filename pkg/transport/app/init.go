@@ -59,24 +59,22 @@ func Init(user user.Service, result result.Service, logger logger.Logger, config
 
 	rtr.Use(middleware.Logging(logger), middleware.PanicRecovery(logger))
 
-	fs := http.FileServer(http.Dir(`psyc/static/html`))
-	rtr.Handle("/", fs)
+	// fs := http.FileServer(http.Dir("psyc/static/html"))
+	// http.Handle("/", fs)
+
+	rtr.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./static/html/index.html")
+	})
 
 	rtr.HandleFunc("/reg", func(w http.ResponseWriter, r *http.Request) {
-		if !sessions.Check(w, r) {
-			w.WriteHeader(http.StatusForbidden)
-		}
-		http.ServeFile(w, r, `psyc/static/html/reg.html`)
+		http.ServeFile(w, r, `./static/html/reg.html`)
 	}).Methods("GET")
 
 	rtr.HandleFunc("/auth", func(w http.ResponseWriter, r *http.Request) {
-		if !sessions.Check(w, r) {
-			w.WriteHeader(http.StatusForbidden)
-		}
-		http.ServeFile(w, r, `psyc/static/html/auth.html`)
+		http.ServeFile(w, r, `./static/html/auth.html`)
 	}).Methods("GET")
 
-	rtr.HandleFunc("/auth", userHandler.login).Methods("POST")
+	rtr.HandleFunc("/auth", userHandler.auth).Methods("POST")
 
 	rtr.HandleFunc("/reg", userHandler.register).Methods("POST")
 
@@ -87,36 +85,41 @@ func Init(user user.Service, result result.Service, logger logger.Logger, config
 	auth.HandleFunc("/keirsey", func(w http.ResponseWriter, r *http.Request) {
 		if !sessions.Check(w, r) {
 			w.WriteHeader(http.StatusForbidden)
+			return
 		}
-		http.ServeFile(w, r, `psyc/static/html/keirsey.html`)
+		http.ServeFile(w, r, `./static/html/keirsey.html`)
 	}).Methods("GET")
 
 	auth.HandleFunc("/bass", func(w http.ResponseWriter, r *http.Request) {
 		if !sessions.Check(w, r) {
 			w.WriteHeader(http.StatusForbidden)
+			return
 		}
-		http.ServeFile(w, r, `psyc/static/html/bass.html`)
+		http.ServeFile(w, r, `./static/html/bass.html`)
 	}).Methods("GET")
 
 	auth.HandleFunc("/eysenck", func(w http.ResponseWriter, r *http.Request) {
 		if !sessions.Check(w, r) {
 			w.WriteHeader(http.StatusForbidden)
+			return
 		}
-		http.ServeFile(w, r, `psyc/static/html/eysenck.html`)
+		http.ServeFile(w, r, `./static/html/eysenck.html`)
 	}).Methods("GET")
 
 	auth.HandleFunc("/hall", func(w http.ResponseWriter, r *http.Request) {
 		if !sessions.Check(w, r) {
 			w.WriteHeader(http.StatusForbidden)
+			return
 		}
-		http.ServeFile(w, r, `psyc/static/html/hall.html`)
+		http.ServeFile(w, r, `./static/html/hall.html`)
 	}).Methods("GET")
 
 	auth.HandleFunc("/info", func(w http.ResponseWriter, r *http.Request) {
 		if !sessions.Check(w, r) {
 			w.WriteHeader(http.StatusForbidden)
+			return
 		}
-		http.ServeFile(w, r, `psyc/static/html/info.html`)
+		http.ServeFile(w, r, `./static/html/info.html`)
 	}).Methods("GET")
 
 	auth.HandleFunc("/info", userHandler.info).Methods("POST")

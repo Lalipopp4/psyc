@@ -27,9 +27,9 @@ func (s *userService) Login(ctx context.Context, email, password string) (string
 }
 
 func (s *userService) Register(ctx context.Context, user *models.User) (string, error) {
-	if len(user.Password) < 8 {
-		return "", errors.ErrorData{Msg: "password must be at least 8 characters"}
-	}
+	// if len(user.Password) < 8 {
+	// 	return "", errors.ErrorData{Msg: "password must be at least 8 characters"}
+	// }
 	user.ID = scripts.GenerateID()
 	token, err := scripts.GenerateJWTUserToken(user.ID, user.Email)
 	if err != nil {

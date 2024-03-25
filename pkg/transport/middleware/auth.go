@@ -18,7 +18,7 @@ func AuthToken(log logger.Logger, cache cache.Cache) func(http.Handler) http.Han
 			id, _, err := scripts.ParseJWTUserToken(r.Header.Get("Authorization"))
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
-				log.Error(err.Error())
+				log.Error(err)
 				return
 			}
 			var auth bool
