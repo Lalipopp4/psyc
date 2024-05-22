@@ -1,12 +1,15 @@
 package result
 
-import "database/sql"
+import (
+	"database/sql"
+	"psyc/internal/controllers/cache"
+)
 
 type resultRepository struct {
 	cur   *sql.DB
-	tests []string
+	cache cache.Cache
 }
 
-func New(db *sql.DB) Repository {
-	return &resultRepository{cur: db}
+func New(db *sql.DB, cache cache.Cache) Repository {
+	return &resultRepository{cur: db, cache: cache}
 }

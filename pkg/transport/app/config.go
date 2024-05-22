@@ -2,15 +2,14 @@ package transport
 
 import (
 	"os"
+	"time"
 
 	"gopkg.in/yaml.v2"
 )
 
 type Config struct {
-	Server struct {
-		Addr    string `default:"0.0.0.0:8000" yaml:"addr"`
-		Timeout int    `default:"10" yaml:"timeout"`
-	}
+	Addr    string        `default:"0.0.0.0:8000" yaml:"addr"`
+	Timeout time.Duration `default:"10000" yaml:"timeout"`
 }
 
 func InitConfig(filepath string) (*Config, error) {
@@ -19,6 +18,5 @@ func InitConfig(filepath string) (*Config, error) {
 		return nil, err
 	}
 	cfg := &Config{}
-	err = yaml.Unmarshal(file, cfg)
-	return cfg, err
+	return cfg, yaml.Unmarshal(file, cfg)
 }

@@ -23,9 +23,9 @@ func AuthToken(log logger.Logger, cache cache.Cache) func(http.Handler) http.Han
 			}
 			var auth bool
 			if strings.Contains(r.URL.Path, "admin") {
-				auth = cache.Check(r.Context(), "admin", id)
+				auth = cache.CheckUser(r.Context(), "admin", id)
 			} else {
-				auth = cache.Check(r.Context(), "user", id)
+				auth = cache.CheckUser(r.Context(), "user", id)
 			}
 			if !auth {
 				http.Error(w, errors.ErrSessionNotAuthenticated, http.StatusUnauthorized)

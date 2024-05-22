@@ -15,10 +15,10 @@ func (r *userRepository) Add(ctx context.Context, user *models.User) error {
 		tx.Rollback()
 		return err
 	}
-	_, err = tx.ExecContext(ctx, `insert into info (user_id, email, last_name, first_name, patronymic, group, grade, sullabus, city) 
-	values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`, user.ID, user.Info.Email,
-		user.Info.Lastname, user.Info.Firstname, user.Info.Patronymic, user.Info.Uni, user.Info.Group, user.Info.Grade,
-		user.Info.Syllabus, user.Info.City)
+	_, err = tx.ExecContext(ctx, `insert into  (user_id, email, last_name, first_name, patronymic, group, grade, sullabus, city) 
+	values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`, user.ID, user.Email,
+		user.Lastname, user.Firstname, user.Patronymic, user.Uni, user.Group, user.Grade,
+		user.Syllabus, user.City)
 	if err != nil {
 		tx.Rollback()
 		return err
@@ -33,10 +33,10 @@ func (r *userRepository) GetIDPassword(ctx context.Context, email string) (strin
 }
 
 func (r *userRepository) Update(ctx context.Context, user *models.User) error {
-	_, err := r.cur.ExecContext(ctx, `update info 
+	_, err := r.cur.ExecContext(ctx, `update  
 	set email=$1, last_name=$2, first_name=$3, patronymic=$4, uni=$5, group=$6, grade=$7, sullabus=$8, city=$9) 
-	where user_id=$10`, user.Info.Email,
-		user.Info.Lastname, user.Info.Firstname, user.Info.Patronymic, user.Info.Uni, user.Info.Group, user.Info.Grade,
-		user.Info.Syllabus, user.Info.City, user.ID)
+	where user_id=$10`, user.Email,
+		user.Lastname, user.Firstname, user.Patronymic, user.Uni, user.Group, user.Grade,
+		user.Syllabus, user.City, user.ID)
 	return err
 }

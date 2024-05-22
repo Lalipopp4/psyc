@@ -17,19 +17,19 @@ func (s *userService) Login(ctx context.Context, email, password string) (string
 	if err != nil {
 		return "", "", err
 	}
-	if s.cache.Check(ctx, "admin", id) {
+	if s.cache.CheckUser(ctx, "admin", id) {
 		return token, "/admin", nil
 	}
-	if err := s.cache.Add(ctx, id, email); err != nil {
+	if err := s.cache.AddUser(ctx, id, email); err != nil {
 		return "", "", err
 	}
 	return token, "/user", nil
 }
 
 func (s *userService) Register(ctx context.Context, user *models.User) (string, error) {
-	// if len(user.Password) < 8 {
-	// 	return "", errors.ErrorData{Msg: "password must be at least 8 characters"}
-	// }
+	if len(user.Password) < 8 {
+		return "", errors.ErrorData{Msg: "password must be at least 8 characters"}
+	}
 	user.ID = scripts.GenerateID()
 	token, err := scripts.GenerateJWTUserToken(user.ID, user.Email)
 	if err != nil {

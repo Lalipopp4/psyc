@@ -6,9 +6,10 @@ import (
 )
 
 type Service interface {
-	Get(ctx context.Context, key, param string) ([]models.Test, error)
-	Keirsey(ctx context.Context, id string, res [4]int) error
-	Hall(ctx context.Context, id string, res [5]int) error
-	Bass(ctx context.Context, id string, self, task, social int) error
-	Eysenck(ctx context.Context, id string, res int) error
+	GetTest(ctx context.Context, test *models.Test) (map[uint]*models.Question, error)
+	AddResult(ctx context.Context, result *models.Test) (string, error)
+	AddReview(ctx context.Context, result *models.Review) error
+	AddTest(ctx context.Context, test *models.Test) error
+	GetReview(ctx context.Context, review *models.Review) (string, error)
+	GetResults(ctx context.Context, user *models.User) ([]models.Result, error)
 }

@@ -19,12 +19,26 @@ import (
 	"psyc/internal/controllers/cache"
 
 	_ "github.com/lib/pq"
+	"github.com/prometheus/client_golang/prometheus"
 	redis "github.com/redis/go-redis/v9"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )
 
 func main() {
+
+	var (
+		status = prometheus.NewCounterVec(prometheus.CounterOpts{
+			Name: "status",
+		}, []string{"status", "path"})
+
+		timings = prometheus.NewHistogramVec(prometheus.HistogramOpts{
+			Name:    "timings",
+			Buckets: []float64{5, 10, 20, 50, 100, 200, 500},
+		}, []string{"path"})
+	)
+
+	_, _ = status, timings
 
 	filepath := *flag.String("config", "config/config.yml", "Defines path to config file")
 
@@ -46,16 +60,16 @@ func main() {
 	}
 
 	redisClient := redis.NewClient(&redis.Options{
-		Addr:     cfgRedis.Redis.Addr,
-		Password: cfgRedis.Redis.Password,
-		DB:       cfgRedis.Redis.Database,
+		Addr:     cfgRedis.Addr,
+		Password: cfgRedis.Password,
+		DB:       cfgRedis.Database,
 	})
 
 	if _, err = redisClient.Ping(ctx).Result(); err != nil {
 		panic("Redis connection error: " + err.Error())
 	}
 
-	cache := cache.New(redisClient)
+	cache := cache.New(redisClient, cfgRedis)
 
 	cfgMail, err := mail.InitConfig(filepath)
 	if err != nil {
@@ -93,7 +107,7 @@ func main() {
 		}
 	}()
 
-	log.Info().Msg("Server is running on " + appConfig.Server.Addr)
+	log.Info().Msg("Server is running on " + appConfig.Addr)
 
 	go func(ctx context.Context) {
 		if err := app.Stop(ctx); err != nil {

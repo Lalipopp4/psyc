@@ -2,6 +2,7 @@ package cache
 
 import (
 	"os"
+	"time"
 
 	"psyc/internal/errors"
 
@@ -10,12 +11,12 @@ import (
 
 // App configuration
 type Config struct {
-	Redis struct {
-		Addr     string `yaml:"addr"`
-		Database int    `yaml:"database"`
-		Password string `yaml:"password"`
-		User     string `yaml:"user"`
-	}
+	Addr     string        `yaml:"addr"`
+	Database int           `yaml:"database"`
+	Password string        `yaml:"password"`
+	User     string        `yaml:"user"`
+	TTLToken time.Duration `yaml:"ttl-token"`
+	TTLData  time.Duration `yaml:"ttl-data"`
 }
 
 // Inits config by parsing toml file
